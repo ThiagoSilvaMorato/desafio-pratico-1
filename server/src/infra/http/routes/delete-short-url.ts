@@ -8,7 +8,7 @@ export const deleteShortUrlRoute: FastifyPluginAsyncZod = async (server) => {
     "/short-url",
     {
       schema: {
-        summary: "Delete a short URL",
+        summary: "Deleta uma URL encurtada",
         tags: ["shortUrl"],
         body: z.object({
           shortUrl: z.string().min(1),

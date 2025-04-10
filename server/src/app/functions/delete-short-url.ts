@@ -13,14 +13,19 @@ type deleteShortUrlInput = z.input<typeof deleteShortUrlInput>;
 export async function deleteShortUrl(input: deleteShortUrlInput) {
   const { shortUrl } = deleteShortUrlInput.parse(input);
 
-  const deletedShortUrl = await db
-    .delete(schema.shortUrls)
+  const shortUrlExists = await db
+    .select({
+      shortUrl: schema.shortUrls.shortUrl,
+    })
+    .from(schema.shortUrls)
     .where(ilike(schema.shortUrls.shortUrl, shortUrl))
-    .returning();
+    .limit(1);
 
-  if (deletedShortUrl.length === 0) {
-    return makeLeft("Short URL does not exists");
+  if (shortUrlExists.length === 0) {
+    return makeLeft("URL encurtada não existe.");
   }
 
-  return makeRight("Short URL deleted successfully.");
+  await db.delete(schema.shortUrls).where(ilike(schema.shortUrls.shortUrl, shortUrl));
+
+  return makeRight("URL encurtada deletada com sucesso.");
 }
