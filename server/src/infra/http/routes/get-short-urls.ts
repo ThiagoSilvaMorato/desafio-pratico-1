@@ -1,53 +1,44 @@
-import { getShortUrls } from "@/app/functions/get-short-urls";
+import { getAllShortUrls } from "@/app/functions/get-short-urls";
 import { isRight, unwrapEither } from "@/infra/shared/either";
 import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { z } from "zod";
 
 export const getShortUrlsRoute: FastifyPluginAsyncZod = async (server) => {
   server.get(
-    "/short-urls",
+    "/short-url/get-all",
     {
       schema: {
-        summary: "Get short URLs",
+        summary: "Get all URLs encurtadas",
         tags: ["short-urls"],
         querystring: z.object({
-          searchQuery: z.string().optional(),
           sortBy: z.enum(["createdAt"]).optional(),
           sortDirection: z.enum(["asc", "desc"]).optional(),
-          page: z.coerce.number().optional().default(1),
-          pageSize: z.coerce.number().optional().default(20),
         }),
         response: {
-          200: z.string(),
-          // z.object({
-          //   uploads: z.array(
-          //     z.object({
-          //       id: z.string(),
-          //       name: z.string(),
-          //       remoteKey: z.string(),
-          //       remoteUrl: z.string(),
-          //       createdAt: z.date(),
-          //     })
-          //   ),
-          //   total: z.number(),
-          // }),
+          200: z.object({
+            shortUrls: z.array(
+              z.object({
+                fullUrl: z.string(),
+                shortUrl: z.string(),
+                accessCount: z.number(),
+                createdAt: z.date(),
+              })
+            ),
+          }),
         },
       },
     },
     async (request, reply) => {
-      // const { page, pageSize, searchQuery, sortBy, sortDirection } = request.query;
+      const { sortBy, sortDirection } = request.query;
 
-      // const result = await getShortUrls({
-      //   page,
-      //   pageSize,
-      //   searchQuery,
-      //   sortBy,
-      //   sortDirection,
-      // });
+      const result = await getAllShortUrls({
+        sortBy,
+        sortDirection,
+      });
 
-      // const { total, uploads } = unwrapEither(result);
+      const { shortUrls } = unwrapEither(result);
 
-      return reply.status(200).send("DEU CERTO PORRA");
+      return reply.status(200).send({ shortUrls });
     }
   );
 };

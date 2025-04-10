@@ -15,6 +15,13 @@
       "when": 1744250569638,
       "tag": "0001_vengeful_hammerhead",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1744293160263,
+      "tag": "0002_graceful_trauma",
+      "breakpoints": true
     }
   ]
 }
