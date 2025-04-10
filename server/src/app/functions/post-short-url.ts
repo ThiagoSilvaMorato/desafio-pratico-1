@@ -23,8 +23,6 @@ export async function postShortUrl(input: PostShortUrlInput) {
     .limit(1);
 
   if (shortUrlAlreadyExists.length > 0) {
-    console.log(shortUrlAlreadyExists);
-
     return makeLeft("Short URL already exists");
   }
 

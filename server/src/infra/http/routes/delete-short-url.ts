@@ -1,17 +1,16 @@
-import { postShortUrl } from "@/app/functions/post-short-url";
+import { deleteShortUrl } from "@/app/functions/delete-short-url";
 import { isLeft, unwrapEither } from "@/infra/shared/either";
 import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { z } from "zod";
 
-export const createShortUrlRoute: FastifyPluginAsyncZod = async (server) => {
-  server.post(
+export const deleteShortUrlRoute: FastifyPluginAsyncZod = async (server) => {
+  server.delete(
     "/short-url",
     {
       schema: {
-        summary: "Create a short URL",
+        summary: "Delete a short URL",
         tags: ["shortUrl"],
         body: z.object({
-          fullUrl: z.string().url(),
           shortUrl: z.string().min(1),
         }),
         response: {
@@ -20,16 +19,16 @@ export const createShortUrlRoute: FastifyPluginAsyncZod = async (server) => {
       },
     },
     async (request, reply) => {
-      const { fullUrl, shortUrl } = request.body;
+      const { shortUrl } = request.body;
 
-      const response = await postShortUrl({ fullUrl, shortUrl });
+      const response = await deleteShortUrl({ shortUrl });
       const wrappedResponse = unwrapEither(response);
 
       if (isLeft(response)) {
         return reply.status(400).send({ message: wrappedResponse });
       }
 
-      return reply.status(201).send(wrappedResponse);
+      return reply.status(204).send();
     }
   );
 };
