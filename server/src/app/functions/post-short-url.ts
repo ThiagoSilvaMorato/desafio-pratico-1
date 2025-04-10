@@ -54,6 +54,7 @@ export async function postShortUrl(input: PostShortUrlInput) {
   const newShortUrl = {
     fullUrl,
     shortUrl,
+    accessCount: 0,
     createdAt: new Date(),
   };
 

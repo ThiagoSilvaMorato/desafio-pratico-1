@@ -1,17 +1,16 @@
-import { postShortUrl } from "@/app/functions/post-short-url";
+import { getShortUrlByShortUrl } from "@/app/functions/get-short-url-by-short-url";
 import { isLeft, unwrapEither } from "@/infra/shared/either";
 import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { z } from "zod";
 
-export const createShortUrlRoute: FastifyPluginAsyncZod = async (server) => {
-  server.post(
-    "/short-url",
+export const getShortUrlByShortUrlRoute: FastifyPluginAsyncZod = async (server) => {
+  server.get(
+    "/short-url/:shortUrl",
     {
       schema: {
-        summary: "Criar uma URL encurtada",
-        tags: ["shortUrl"],
-        body: z.object({
-          fullUrl: z.string().url(),
+        summary: "Get URL encurtada por uma URL encurtada",
+        tags: ["short-urls-by-short-url"],
+        params: z.object({
           shortUrl: z.string().min(1),
         }),
         response: {
@@ -30,17 +29,19 @@ export const createShortUrlRoute: FastifyPluginAsyncZod = async (server) => {
       },
     },
     async (request, reply) => {
-      const { fullUrl, shortUrl } = request.body;
+      const { shortUrl } = request.params;
 
-      const response = await postShortUrl({ fullUrl, shortUrl });
+      const response = await getShortUrlByShortUrl({
+        shortUrl,
+      });
 
       if (isLeft(response)) {
-        const errorResponse = unwrapEither(response);
-        return reply.status(400).send({ message: errorResponse });
+        const errorMessage = unwrapEither(response);
+        return reply.status(400).send({ message: errorMessage });
       }
 
       const wrappedResponse = unwrapEither(response);
-      return reply.status(201).send({ shortUrl: wrappedResponse });
+      return reply.status(200).send({ shortUrl: wrappedResponse.shortUrl });
     }
   );
 };

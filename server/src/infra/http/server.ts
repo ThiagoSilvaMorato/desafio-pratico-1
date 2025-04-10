@@ -4,6 +4,7 @@ import { getShortUrlsRoute } from "./routes/get-short-urls";
 import { serializerCompiler, validatorCompiler } from "fastify-type-provider-zod";
 import { createShortUrlRoute } from "./routes/create-short-url";
 import { deleteShortUrlRoute } from "./routes/delete-short-url";
+import { getShortUrlByShortUrlRoute } from "./routes/get-short-url-by-short-url";
 
 const server = fastify();
 
@@ -15,6 +16,7 @@ server.register(fastifyCors, { origin: "*" });
 server.register(getShortUrlsRoute);
 server.register(createShortUrlRoute);
 server.register(deleteShortUrlRoute);
+server.register(getShortUrlByShortUrlRoute);
 
 server.listen({ port: 3333, host: "0.0.0.0" }).then(() => {
   console.log("HTTP server running! 🚀");
