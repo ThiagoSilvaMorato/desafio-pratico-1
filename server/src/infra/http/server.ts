@@ -10,6 +10,7 @@ import fastifyMultipart from "@fastify/multipart";
 import fastifySwagger from "@fastify/swagger";
 import { transformSwaggerSchema } from "./transform-swagger-schema";
 import fastifySwaggerUi from "@fastify/swagger-ui";
+import { exportShortUrlsToCsvRoute } from "./routes/export-short-urls-to-csv";
 
 const server = fastify();
 
@@ -38,6 +39,7 @@ server.register(createShortUrlRoute);
 server.register(deleteShortUrlRoute);
 server.register(getShortUrlByShortUrlRoute);
 server.register(incrementAccessCountRoute);
+server.register(exportShortUrlsToCsvRoute);
 
 server.listen({ port: 3333, host: "0.0.0.0" }).then(() => {
   console.log("HTTP server running! 🚀");
