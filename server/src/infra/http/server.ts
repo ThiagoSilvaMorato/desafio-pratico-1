@@ -6,6 +6,10 @@ import { createShortUrlRoute } from "./routes/create-short-url";
 import { deleteShortUrlRoute } from "./routes/delete-short-url";
 import { getShortUrlByShortUrlRoute } from "./routes/get-short-url-by-short-url";
 import { incrementAccessCountRoute } from "./routes/increment-access-count";
+import fastifyMultipart from "@fastify/multipart";
+import fastifySwagger from "@fastify/swagger";
+import { transformSwaggerSchema } from "./transform-swagger-schema";
+import fastifySwaggerUi from "@fastify/swagger-ui";
 
 const server = fastify();
 
@@ -13,6 +17,21 @@ server.setValidatorCompiler(validatorCompiler);
 server.setSerializerCompiler(serializerCompiler);
 
 server.register(fastifyCors, { origin: "*" });
+
+server.register(fastifyMultipart);
+server.register(fastifySwagger, {
+  openapi: {
+    info: {
+      title: "Brev.ly",
+      version: "1.0.0",
+    },
+  },
+  transform: transformSwaggerSchema,
+});
+
+server.register(fastifySwaggerUi, {
+  routePrefix: "/docs",
+});
 
 server.register(getShortUrlsRoute);
 server.register(createShortUrlRoute);

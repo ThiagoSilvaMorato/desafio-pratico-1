@@ -9,3 +9,15 @@ services:
       - POSTGRES_DB=short_url
     volumes:
       - "./docker:/docker-entrypoint-initdb.d"
+  bucket:
+    container_name: nest-bucket
+    image: bitnami/minio
+    volumes:
+      - ./data/bucket:/bitnami/minio/data
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_DEFAULT_BUCKETS: short-url
+      MINIO_ROOT_USER: access-key
+      MINIO_ROOT_PASSWORD: secret-key

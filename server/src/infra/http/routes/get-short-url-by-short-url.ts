@@ -9,7 +9,7 @@ export const getShortUrlByShortUrlRoute: FastifyPluginAsyncZod = async (server) 
     {
       schema: {
         summary: "Get URL encurtada por uma URL encurtada",
-        tags: ["short-urls-by-short-url"],
+        tags: ["short-url"],
         params: z.object({
           shortUrl: z.string().min(1),
         }),

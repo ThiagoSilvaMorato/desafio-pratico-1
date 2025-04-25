@@ -9,7 +9,7 @@ export const getShortUrlsRoute: FastifyPluginAsyncZod = async (server) => {
     {
       schema: {
         summary: "Get all URLs encurtadas",
-        tags: ["short-urls"],
+        tags: ["short-url"],
         querystring: z.object({
           sortBy: z.enum(["createdAt"]).optional(),
           sortDirection: z.enum(["asc", "desc"]).optional(),

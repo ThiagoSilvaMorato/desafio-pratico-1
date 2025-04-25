@@ -10,7 +10,7 @@ export const incrementAccessCountRoute: FastifyPluginAsyncZod = async (server) =
     {
       schema: {
         summary: "Incrementa o contador de acessos em um",
-        tags: ["short-urls"],
+        tags: ["short-url"],
         params: z.object({
           shortUrl: z.string(),
         }),

@@ -9,7 +9,7 @@ export const createShortUrlRoute: FastifyPluginAsyncZod = async (server) => {
     {
       schema: {
         summary: "Criar uma URL encurtada",
-        tags: ["shortUrl"],
+        tags: ["short-url"],
         body: z.object({
           fullUrl: z.string().url(),
           shortUrl: z.string().min(1),
