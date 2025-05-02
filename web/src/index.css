@@ -1,7 +1,19 @@
 @import "tailwindcss";
 
+@theme {
+  --font-primary: "Inter", "system-ui", "sans-serif";
+
+  --font-size-xsm: 12px;
+}
+
 @property --border-angle {
   inherits: false;
   initial-value: 0deg;
   syntax: "<angle>";
+}
+
+@layer utilities {
+  .text-xsm {
+    font-size: var(--font-size-xsm);
+  }
 }
