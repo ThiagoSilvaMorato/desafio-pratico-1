@@ -5,12 +5,12 @@ import { z } from "zod";
 
 export const deleteShortUrlRoute: FastifyPluginAsyncZod = async (server) => {
   server.delete(
-    "/short-url",
+    "/short-url/:shortUrl",
     {
       schema: {
         summary: "Deleta uma URL encurtada",
         tags: ["short-url"],
-        body: z.object({
+        params: z.object({
           shortUrl: z.string().min(1),
         }),
         response: {
@@ -19,7 +19,7 @@ export const deleteShortUrlRoute: FastifyPluginAsyncZod = async (server) => {
       },
     },
     async (request, reply) => {
-      const { shortUrl } = request.body;
+      const { shortUrl } = request.params;
 
       const response = await deleteShortUrl({ shortUrl });
       const wrappedResponse = unwrapEither(response);
