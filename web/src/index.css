@@ -17,3 +17,38 @@
     font-size: var(--font-size-xsm);
   }
 }
+
+@keyframes loading {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(1000%);
+  }
+}
+
+.animate-loading {
+  animation: loading 1.5s infinite ease-in-out;
+}
+
+@keyframes progress {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
+
+.scroll-custom::-webkit-scrollbar {
+  width: 20px;
+}
+
+.scroll-custom::-webkit-scrollbar-thumb {
+  background: #213fa2;
+}
+
+.scroll-custom::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+  padding-left: 4px;
+}

@@ -1,13 +1,12 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Home } from "@/pages/Home";
+import { Toaster } from "react-hot-toast";
+import GuardRoute from "./GuardRoute";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<Home />} />
-      </Routes>
-    </BrowserRouter>
+    <>
+      <GuardRoute />
+      <Toaster position='bottom-right' />
+    </>
   );
 }
 
