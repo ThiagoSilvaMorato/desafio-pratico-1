@@ -1,15 +1,35 @@
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { services } from "../../services";
+import toastMessages from "@/components/ToastMessages";
 
-const NewLink = () => {
+interface INewLinkProps {
+  setRefreshMyLinks: Dispatch<SetStateAction<boolean>>;
+}
+
+const NewLink = ({ setRefreshMyLinks }: INewLinkProps) => {
   const [fullUrl, setFullUrl] = useState("");
   const [shortUrl, setShortUrl] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = () => {
-    services.postNewShortUrl({
-      fullUrl,
-      shortUrl,
-    });
+    setIsLoading(true);
+    services
+      .postNewShortUrl({
+        fullUrl,
+        shortUrl,
+      })
+      .then((response) => {
+        console.log({ response });
+        setIsLoading(false);
+        // setFullUrl("");
+        // setShortUrl("");
+        setRefreshMyLinks((prev) => !prev);
+      })
+      .catch((error) => {
+        console.log({ error: error.response.data.message });
+        toastMessages.error("Erro ao salvar o link", error.response.data.message);
+        setIsLoading(false);
+      });
   };
 
   return (
@@ -43,10 +63,10 @@ const NewLink = () => {
       <button
         className='bg-[#2c46b1] text-white rounded-lg p-2 disabled:bg-[#939fd6] h-[60px] cursor-pointer disabled:cursor-not-allowed mt-4'
         type='button'
-        disabled={fullUrl.length === 0 && shortUrl.length === 0}
+        disabled={(fullUrl.length === 0 && shortUrl.length === 0) || isLoading}
         onClick={handleSubmit}
       >
-        Salvar link
+        {isLoading ? "Salvando..." : "Salvar link"}
       </button>
     </div>
   );
